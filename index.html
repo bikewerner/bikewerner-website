@@ -25,12 +25,17 @@
             background: rgba(0, 0, 0, 0.5); /* Leicht transparenter Hintergrund für bessere Lesbarkeit */
             padding: 20px;
             border-radius: 10px;
-            text-align: center; /* Zentrierung des Inhalts */
+            text-align: center; /* Zentriert den Text */
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Stellt sicher, dass die Buttons untereinander stehen */
+            align-items: center; /* Zentriert die Buttons */
+            gap: 10px; /* Abstand zwischen den Buttons */
         }
         .button {
             display: block;
-            width: 100%;
-            margin: 10px 0;
+            width: 200px; /* Einheitliche Breite */
             padding: 15px;
             font-size: 18px;
             font-weight: bold;
@@ -51,9 +56,10 @@
     <div class="container">
         <h1>Willkommen Bike Werners!</h1>
         <p>Hier entsteht in Kürze unsere Webseite.</p>
-        <a href="Touren.html" class="button">Touren</a>
-        <a href="Werners.html" class="button">Werners</a>
+        <div class="button-container">
+            <a href="Touren.html" class="button">Touren</a>
+            <a href="Werners.html" class="button">Werners</a>
+        </div>
     </div>
 </body>
 </html>
-
