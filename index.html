@@ -6,37 +6,37 @@
     <title>Bike Werners</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/TabIcon.ico">
     <style>
-        body {
-            background-image: url('https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/BikewernerLogoGPT.jpg');
-            background-size: cover; /* Bild passt sich an */
-            background-position: center; /* Zentrierung */
-            background-attachment: fixed; /* Bild bleibt beim Scrollen */
-            color: white; /* Textfarbe für bessere Sichtbarkeit */
-            font-family: Arial, sans-serif;
-            text-align: center;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100vh; /* Volle Bildschirmhöhe */
+            overflow: hidden; /* Verhindert Scrollen */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Volle Höhe des Bildschirms */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/BikewernerLogoGPT.jpg') no-repeat center center/cover;
+            color: white;
         }
         .container {
             max-width: 400px;
-            background: rgba(0, 0, 0, 0.5); /* Leicht transparenter Hintergrund für bessere Lesbarkeit */
+            background: rgba(0, 0, 0, 0.5); /* Leicht transparenter Hintergrund */
             padding: 20px;
             border-radius: 10px;
-            text-align: center; /* Zentriert den Text */
+            text-align: center;
         }
         .button-container {
             display: flex;
-            flex-direction: column; /* Stellt sicher, dass die Buttons untereinander stehen */
-            align-items: center; /* Zentriert die Buttons */
-            gap: 10px; /* Abstand zwischen den Buttons */
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Abstand zwischen Buttons */
         }
         .button {
-            display: block;
-            width: 200px; /* Einheitliche Breite */
+            width: 200px;
             padding: 15px;
             font-size: 18px;
             font-weight: bold;
