@@ -1,6 +1,6 @@
 // Passwort-Konfiguration
-const PASSWORD = "bike123"; // Ändere dies für ein neues Passwort
-const PASSWORD_VERSION = "v2"; // Erhöhe dies, wenn das Passwort geändert wird
+const PASSWORD = "bw"; // Ändere dies für ein neues Passwort
+const PASSWORD_VERSION = "v3"; // Erhöhe dies, wenn das Passwort geändert wird
 
 // Überprüft, ob der Nutzer bereits eingeloggt ist
 function checkAuth() {
