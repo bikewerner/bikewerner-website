@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bike Werners</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/pictures/Rad.ico">
-    <!-- Skript zur Passwortabfrage -->
-    <script src="auth.js"></script>
     <style>
         * {
             margin: 0;
@@ -23,4 +21,51 @@
             text-align: center;
             background: url('https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/pictures/BikeWernerLogo.png');
             background-size: contain; /* Passt sich an Bildschirmgröße an, ohne das Bild zu beschneiden */
-            background-position: cente
+            background-position: center; /* Immer zentriert */
+            background-repeat: no-repeat; /* Verhindert die Wiederholung des Hintergrundbildes */
+            background-attachment: fixed; /* Bleibt beim Scrollen fixiert */
+            color: white;
+        }
+        .container {
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.5); /* Leicht transparenter Hintergrund */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Abstand zwischen Buttons */
+        }
+        .button {
+            width: 200px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: #6c757d; /* Grau */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+        .button:hover {
+            background: #5a6268; /* Dunkleres Grau beim Hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Willkommen Bike Werners!</h1>
+        <p>Hier entsteht aktuell unsere Webseite.</p>
+        <div class="button-container">
+            <a href="Touren.html" class="button">Touren</a>
+            <a href="Werners.html" class="button">Werners</a>
+        </div>
+    </div>
+</body>
+</html>
+            
