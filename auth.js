@@ -1,4 +1,4 @@
-const CORRECT_PASSWORD = "bike123"; // Passwort hier festlegen
+const CORRECT_PASSWORD = "BW"; // Passwort hier festlegen
 
 function checkAccess() {
     if (localStorage.getItem("auth") !== "true") {
