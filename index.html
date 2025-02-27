@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bike Werners</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/pictures/Rad.ico">
-    <!-- Skript zur Passwortabfrage -->
-    <script src="auth.js"></script>
+    <script src="auth.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -57,10 +56,44 @@
         .button:hover {
             background: #5a6268; /* Dunkleres Grau beim Hover */
         }
+        .hidden {
+            display: none;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        button {
+            width: 80%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #errorMessage {
+            color: red;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="login-container" class="container">
+        <h2>Passwort eingeben</h2>
+        <input type="password" id="passwordInput" placeholder="Passwort">
+        <button onclick="login()">Anmelden</button>
+        <p id="errorMessage">Falsches Passwort!</p>
+    </div>
+
+    <div id="content-container" class="container hidden">
         <h1>Willkommen Bike Werners!</h1>
         <p>Hier entsteht aktuell unsere Webseite.</p>
         <div class="button-container">
@@ -68,6 +101,28 @@
             <a href="Werners.html" class="button">Werners</a>
         </div>
     </div>
+
+    <script>
+        function showContent() {
+            document.getElementById("login-container").classList.add("hidden");
+            document.getElementById("content-container").classList.remove("hidden");
+        }
+
+        function login() {
+            const enteredPassword = document.getElementById("passwordInput").value;
+            if (enteredPassword === "bike123") { // Passwort hier ändern
+                localStorage.setItem("auth", "true");
+                localStorage.setItem("passwordVersion", "v2"); // Version erhöhen, wenn Passwort geändert wird
+                showContent();
+            } else {
+                document.getElementById("errorMessage").style.display = "block";
+            }
+        }
+
+        // Falls Benutzer bereits eingeloggt ist, Inhalt direkt anzeigen
+        if (localStorage.getItem("auth") === "true" && localStorage.getItem("passwordVersion") === "v2") {
+            showContent();
+        }
+    </script>
 </body>
-</html>
-            
+</html>          
