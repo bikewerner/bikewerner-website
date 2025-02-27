@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bike Werners</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/pictures/Rad.ico">
+    <!-- Skript zur Passwortabfrage -->
+    <script src="auth.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,126 +14,13 @@
             box-sizing: border-box;
         }
         html, body {
-            height: 100vh;
+            height: 100vh; /* Volle Bildschirmhöhe */
+            overflow: hidden; /* Verhindert Scrollen */
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: Arial, sans-serif;
             text-align: center;
             background: url('https://raw.githubusercontent.com/bikewerner/bikewerner-website/main/pictures/BikeWernerLogo.png');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            color: white;
-        }
-        .container {
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        .button {
-            width: 200px;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background: #6c757d;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-        }
-        .button:hover {
-            background: #5a6268;
-        }
-        /* Passwort-Abfrage */
-        .password-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .password-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            color: black;
-        }
-        .password-input {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .password-button {
-            padding: 10px 20px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .password-button:hover {
-            background: #5a6268;
-        }
-    </style>
-</head>
-<body>
-    <div class="password-overlay" id="passwordOverlay">
-        <div class="password-box">
-            <h2>Passwort erforderlich</h2>
-            <input type="password" id="passwordInput" class="password-input" placeholder="Passwort eingeben">
-            <button class="password-button" onclick="checkPassword()">Login</button>
-            <p id="errorMessage" style="color: red; display: none;">Falsches Passwort!</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <h1>Willkommen Bike Werners!</h1>
-        <p>Hier entsteht aktuell unsere Webseite.</p>
-        <div class="button-container">
-            <a href="Touren.html" class="button">Touren</a>
-            <a href="Werners.html" class="button">Werners</a>
-        </div>
-    </div>
-
-    <script>
-        const CORRECT_PASSWORD = "bike123"; // Passwort hier festlegen
-
-        function checkPassword() {
-            const enteredPassword = document.getElementById("passwordInput").value;
-            if (enteredPassword === CORRECT_PASSWORD) {
-                localStorage.setItem("auth", "true");
-                document.getElementById("passwordOverlay").style.display = "none";
-            } else {
-                document.getElementById("errorMessage").style.display = "block";
-            }
-        }
-
-        function verifyAccess() {
-            if (localStorage.getItem("auth") === "true") {
-                document.getElementById("passwordOverlay").style.display = "none";
-            }
-        }
-
-        verifyAccess();
-    </script>
-</body>
-</html>
+            background-size: contain; /* Passt sich an Bildschirmgröße an, ohne das Bild zu beschneiden */
+            background-position: cente
