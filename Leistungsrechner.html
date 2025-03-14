@@ -45,15 +45,18 @@
             const airDensity = 1.225;
             
             // Berechne gesamte Strecke
+            let distances = [];
             for (let i = 1; i < points.length; i++) {
                 const p1 = points[i - 1];
                 const p2 = points[i];
-                totalDistance += haversine(
+                const dist = haversine(
                     parseFloat(p1.getAttribute("lat")),
                     parseFloat(p1.getAttribute("lon")),
                     parseFloat(p2.getAttribute("lat")),
                     parseFloat(p2.getAttribute("lon"))
                 );
+                distances.push(dist);
+                totalDistance += dist;
             }
             
             for (let i = 1; i < points.length; i++) {
@@ -68,13 +71,13 @@
                 const lon2 = parseFloat(p2.getAttribute("lon"));
                 const ele2 = parseFloat(p2.getElementsByTagName("ele")[0]?.textContent || 0);
                 
-                const distance = haversine(lat1, lon1, lat2, lon2);
+                const distance = distances[i - 1];
                 const elevationGain = ele2 - ele1;
                 const segmentTime = (distance / totalDistance) * targetTime;
                 
                 if (segmentTime > 0 && distance > 0) {
-                    const velocity = distance / segmentTime;
-                    const gradient = elevationGain / distance;
+                    const velocity = Math.max(distance / segmentTime, 0.1); // Sicherstellen, dass v > 0
+                    const gradient = elevationGain / Math.max(distance, 1);
                     
                     const rollingResistance = crr * mass * g * Math.cos(Math.atan(gradient));
                     const aerodynamicDrag = 0.5 * airDensity * cda * velocity * velocity;
