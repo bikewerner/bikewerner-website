@@ -35,7 +35,7 @@
             
             const points = Array.from(xmlDoc.getElementsByTagName("trkpt"));
             let totalDistance = 0;
-            let totalEnergy = 0;
+            let totalPower = 0;
             
             const mass = 90;
             const crr = 0.005;
@@ -76,20 +76,18 @@
                     const velocity = distance / segmentTime;
                     const gradient = elevationGain / distance;
                     
-                    const rollingResistance = crr * mass * g * Math.cos(Math.atan(gradient));
+                    const rollingResistance = crr * mass * g;
                     const aerodynamicDrag = 0.5 * airDensity * cda * velocity * velocity;
-                    const gravityForce = mass * g * Math.sin(Math.atan(gradient));
+                    const gravityForce = mass * g * gradient;
                     
-                    const totalForce = (rollingResistance + aerodynamicDrag + gravityForce);
+                    const totalForce = rollingResistance + aerodynamicDrag + gravityForce;
                     const power = (totalForce * velocity) / drivetrainEfficiency;
-                    const energy = power * segmentTime;
                     
-                    totalEnergy += energy;
+                    totalPower += power * (segmentTime / targetTime);
                 }
             }
             
-            const avgPower = targetTime > 0 ? totalEnergy / targetTime : 0;
-            document.getElementById("result").innerText = `Durchschnittliche benötigte Leistung: ${avgPower.toFixed(2)} W`;
+            document.getElementById("result").innerText = `Durchschnittliche benötigte Leistung: ${totalPower.toFixed(2)} W`;
         }
 
         function haversine(lat1, lon1, lat2, lon2) {
