@@ -8,14 +8,23 @@
 <body>
     <h1>GPX Leistungsrechner</h1>
     <input type="file" id="gpxFile" accept=".gpx">
+    <input type="number" id="targetTime" placeholder="Zielzeit in Minuten">
     <button onclick="processGPX()">Berechnen</button>
     <p id="result"></p>
 
     <script>
         async function processGPX() {
             const fileInput = document.getElementById('gpxFile');
+            const targetTimeInput = document.getElementById('targetTime').value;
+            
             if (!fileInput.files.length) {
                 alert("Bitte eine GPX-Datei auswählen.");
+                return;
+            }
+            
+            const targetTime = parseFloat(targetTimeInput) * 60; // in Sekunden
+            if (isNaN(targetTime) || targetTime <= 0) {
+                alert("Bitte eine gültige Zielzeit in Minuten eingeben.");
                 return;
             }
 
@@ -25,7 +34,7 @@
             const xmlDoc = parser.parseFromString(text, "application/xml");
             
             const points = Array.from(xmlDoc.getElementsByTagName("trkpt"));
-            let totalTime = 0;
+            let totalDistance = 0;
             let totalEnergy = 0;
             
             const mass = 90;
@@ -35,6 +44,18 @@
             const g = 9.81;
             const airDensity = 1.225;
             
+            // Berechne gesamte Strecke
+            for (let i = 1; i < points.length; i++) {
+                const p1 = points[i - 1];
+                const p2 = points[i];
+                totalDistance += haversine(
+                    parseFloat(p1.getAttribute("lat")),
+                    parseFloat(p1.getAttribute("lon")),
+                    parseFloat(p2.getAttribute("lat")),
+                    parseFloat(p2.getAttribute("lon"))
+                );
+            }
+            
             for (let i = 1; i < points.length; i++) {
                 const p1 = points[i - 1];
                 const p2 = points[i];
@@ -42,19 +63,16 @@
                 const lat1 = parseFloat(p1.getAttribute("lat"));
                 const lon1 = parseFloat(p1.getAttribute("lon"));
                 const ele1 = parseFloat(p1.getElementsByTagName("ele")[0]?.textContent || 0);
-                const time1 = new Date(p1.getElementsByTagName("time")[0]?.textContent).getTime();
                 
                 const lat2 = parseFloat(p2.getAttribute("lat"));
                 const lon2 = parseFloat(p2.getAttribute("lon"));
                 const ele2 = parseFloat(p2.getElementsByTagName("ele")[0]?.textContent || 0);
-                const time2 = new Date(p2.getElementsByTagName("time")[0]?.textContent).getTime();
                 
                 const distance = haversine(lat1, lon1, lat2, lon2);
                 const elevationGain = ele2 - ele1;
-                const segmentTime = (time2 - time1) / 1000; // Zeit in Sekunden
+                const segmentTime = (distance / totalDistance) * targetTime;
                 
                 if (segmentTime > 0 && distance > 0) {
-                    totalTime += segmentTime;
                     const velocity = distance / segmentTime;
                     const gradient = elevationGain / distance;
                     
@@ -70,7 +88,7 @@
                 }
             }
             
-            const avgPower = totalTime > 0 ? totalEnergy / totalTime : 0;
+            const avgPower = targetTime > 0 ? totalEnergy / targetTime : 0;
             document.getElementById("result").innerText = `Durchschnittliche benötigte Leistung: ${avgPower.toFixed(2)} W`;
         }
 
