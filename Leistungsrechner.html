@@ -47,7 +47,7 @@
                 segments.push({ distance, elevationGain });
             }
             
-            const targetTime = 3600; // 1 Stunde
+            const targetTime = 1200; // 20 Minuten
             const avgPower = calculatePower(segments, totalDistance, targetTime);
             document.getElementById("result").innerText = `Durchschnittliche benötigte Leistung: ${avgPower.toFixed(2)} W`;
         }
