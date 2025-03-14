@@ -26,8 +26,15 @@
             
             const points = Array.from(xmlDoc.getElementsByTagName("trkpt"));
             let totalTime = 0;
-            let segments = [];
-
+            let totalEnergy = 0;
+            
+            const mass = 90;
+            const crr = 0.005;
+            const cda = 0.35;
+            const drivetrainEfficiency = 0.97;
+            const g = 9.81;
+            const airDensity = 1.225;
+            
             for (let i = 1; i < points.length; i++) {
                 const p1 = points[i - 1];
                 const p2 = points[i];
@@ -46,11 +53,22 @@
                 const elevationGain = Math.max(0, ele2 - ele1);
                 const segmentTime = (time2 - time1) / 1000; // Zeit in Sekunden
                 
-                totalTime += segmentTime;
-                segments.push({ distance, elevationGain, segmentTime });
+                if (segmentTime > 0) {
+                    totalTime += segmentTime;
+                    const velocity = distance / segmentTime;
+                    
+                    const rollingResistance = crr * mass * g * velocity;
+                    const aerodynamicDrag = 0.5 * airDensity * cda * Math.pow(velocity, 3);
+                    const gravityForce = distance > 0 ? (mass * g * elevationGain / distance) * velocity : 0;
+                    
+                    const power = (rollingResistance + aerodynamicDrag + gravityForce) / drivetrainEfficiency;
+                    const energy = power * segmentTime; // Energie in Joule
+                    
+                    totalEnergy += energy;
+                }
             }
             
-            const avgPower = calculatePower(segments, totalTime);
+            const avgPower = totalTime > 0 ? totalEnergy / totalTime : 0;
             document.getElementById("result").innerText = `Durchschnittliche benötigte Leistung: ${avgPower.toFixed(2)} W`;
         }
 
@@ -66,30 +84,6 @@
             
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
-        }
-
-        function calculatePower(segments, totalTime) {
-            const mass = 90;
-            const crr = 0.005;
-            const cda = 0.35;
-            const drivetrainEfficiency = 0.97;
-            const g = 9.81;
-            const airDensity = 1.225;
-            
-            let totalPower = 0;
-            
-            segments.forEach(({ distance, elevationGain, segmentTime }) => {
-                const velocity = segmentTime > 0 ? distance / segmentTime : 0;
-                
-                const rollingResistance = crr * mass * g * velocity;
-                const aerodynamicDrag = 0.5 * airDensity * cda * Math.pow(velocity, 3);
-                const gravityForce = distance > 0 ? (mass * g * elevationGain / distance) * velocity : 0;
-                
-                const power = (rollingResistance + aerodynamicDrag + gravityForce) / drivetrainEfficiency;
-                totalPower += power * segmentTime;
-            });
-            
-            return totalTime > 0 ? totalPower / totalTime : 0;
         }
     </script>
 </body>
