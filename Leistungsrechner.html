@@ -25,7 +25,7 @@
             const xmlDoc = parser.parseFromString(text, "application/xml");
             
             const points = Array.from(xmlDoc.getElementsByTagName("trkpt"));
-            let totalDistance = 0;
+            let totalTime = 0;
             let segments = [];
 
             for (let i = 1; i < points.length; i++) {
@@ -35,20 +35,22 @@
                 const lat1 = parseFloat(p1.getAttribute("lat"));
                 const lon1 = parseFloat(p1.getAttribute("lon"));
                 const ele1 = parseFloat(p1.getElementsByTagName("ele")[0]?.textContent || 0);
+                const time1 = new Date(p1.getElementsByTagName("time")[0]?.textContent).getTime();
                 
                 const lat2 = parseFloat(p2.getAttribute("lat"));
                 const lon2 = parseFloat(p2.getAttribute("lon"));
                 const ele2 = parseFloat(p2.getElementsByTagName("ele")[0]?.textContent || 0);
+                const time2 = new Date(p2.getElementsByTagName("time")[0]?.textContent).getTime();
                 
                 const distance = haversine(lat1, lon1, lat2, lon2);
                 const elevationGain = Math.max(0, ele2 - ele1);
+                const segmentTime = (time2 - time1) / 1000; // Zeit in Sekunden
                 
-                totalDistance += distance;
-                segments.push({ distance, elevationGain });
+                totalTime += segmentTime;
+                segments.push({ distance, elevationGain, segmentTime });
             }
             
-            const targetTime = 1200; // 20 Minuten
-            const avgPower = calculatePower(segments, totalDistance, targetTime);
+            const avgPower = calculatePower(segments, totalTime);
             document.getElementById("result").innerText = `Durchschnittliche benötigte Leistung: ${avgPower.toFixed(2)} W`;
         }
 
@@ -66,7 +68,7 @@
             return R * c;
         }
 
-        function calculatePower(segments, totalDistance, targetTime) {
+        function calculatePower(segments, totalTime) {
             const mass = 90;
             const crr = 0.005;
             const cda = 0.35;
@@ -76,8 +78,7 @@
             
             let totalPower = 0;
             
-            segments.forEach(({ distance, elevationGain }) => {
-                const segmentTime = (distance / totalDistance) * targetTime;
+            segments.forEach(({ distance, elevationGain, segmentTime }) => {
                 const velocity = segmentTime > 0 ? distance / segmentTime : 0;
                 
                 const rollingResistance = crr * mass * g * velocity;
@@ -85,10 +86,10 @@
                 const gravityForce = distance > 0 ? (mass * g * elevationGain / distance) * velocity : 0;
                 
                 const power = (rollingResistance + aerodynamicDrag + gravityForce) / drivetrainEfficiency;
-                totalPower += power;
+                totalPower += power * segmentTime;
             });
             
-            return segments.length ? totalPower / segments.length : 0;
+            return totalTime > 0 ? totalPower / totalTime : 0;
         }
     </script>
 </body>
